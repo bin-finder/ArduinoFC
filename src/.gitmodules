@@ -1,6 +1,0 @@
-[submodule "lib"]
-	path = lib
-	url = ../ServoMotor/
-[submodule "lib/ServoMotor"]
-	path = lib/ServoMotor
-	url = ../ServoMotor/
