@@ -5,12 +5,11 @@
 class RCreciever : public IRCreciever{
 
     private:
-        int interruptPin;
+        PPMReader ppm;
         int numChannels;
-        PPMReader* ppm = nullptr;
 
     public:
         RCreciever(int interruptPin, int numChannels);
-        void getLatest(unsigned* data);
+        void getLatest(int* data);
 
 };

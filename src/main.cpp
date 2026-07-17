@@ -3,6 +3,8 @@
 #include "Rudder.h"
 #include "ServoMotor.h"
 #include "RCreciever.h"
+#include "IflightMode.h"
+#include "manualControl.h"
 /*
 * This is the software for the Arduino Fixed Wing Flight Controler.
 * It probibly wount work.
@@ -23,22 +25,25 @@ ServoMotor rud[] = {{12}};
 Rudder rudder = Rudder(rud, 1);
 Elevons elevons = Elevons(leftAler, rightAler, 1, 1);
 
-//The target angles for the pids
-double tgtAngles[2]; //x, y
-
-//Setup the PPM reciever for getting target positions.
 byte interruptPin = 3;
 byte channelAmount = 6;
+
 RCreciever reciever(interruptPin, channelAmount);
 
+IflightMode control = manualControl(&elevons, &reciever);
+
 void setup(){
-  Serial.begin(9600);
   bool goodToGo = true;
 
   pinMode(LED_BUILTIN, OUTPUT);
   //starting ther servos.
   rudder.start();
   elevons.start();
+
+  int values[channelAmount];
+  reciever.getLatest(values);
+
+  if(values[0] > 10) goodToGo = false;
 
   if(!goodToGo){
     while(true) {
@@ -52,11 +57,7 @@ void setup(){
 }
 
 void loop(){
-//TODO: write PID loop.
-  unsigned int value[6];
-  reciever.getLatest(value);
 
-  //roll pid:
-
+  control.update();
 
 }

@@ -64,7 +64,7 @@ class PPMReader {
 
     public:
 
-    PPMReader(byte interruptPin, byte channelAmount);
+    PPMReader(int interruptPin, int channelAmount);
     ~PPMReader(void);
 
     // Returns the latest raw (not necessarily valid) value for the channel (starting from 1)

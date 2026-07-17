@@ -1,20 +1,27 @@
 #pragma once
 #include "IElevons.h"
-#include "IMPU6050.h"
-#include "IPPMReader.h"
+#include "RCreciever.h"
+#include "config.h"
+#include "IflightMode.h"
 
-class manualControl{
+class manualControl : public IflightMode{
     private:
         IElevons* elevons = nullptr;
-        IMPU6050* sense = nullptr;
-        IPPMReader* controlIn = nullptr;
+        RCreciever* controlIn = nullptr;
     public:
-        manualControl(IElevons* elevons, IMPU6050* sense, IPPMReader* controlIn) : 
+        manualControl(IElevons* elevons, RCreciever* controlIn) : 
         elevons(elevons), 
-        sense(sense), 
         controlIn(controlIn)
         {}
 
-        
+        int udpate(){
+                int value[numChannels];
+                controlIn->getLatest(value);
+                for(int i = 0; i < numChannels; i++){
+                    value[i] = value[i]/(controlIn->maxChannelValue - controlIn->minChannelValue);
+                }
+                elevons->write(value[1],value[2]);
+        }
 
+        void reset(){}
 };

@@ -27,7 +27,7 @@ void PPMReader::PPM_ISR(void) {
 }
 
 
-PPMReader::PPMReader(byte interruptPin, byte channelAmount):
+PPMReader::PPMReader(int interruptPin, int channelAmount):
     interruptPin(interruptPin), channelAmount(channelAmount) {
     // Setup an array for storing channel values
     rawValues = new unsigned [channelAmount];

@@ -3,5 +3,5 @@
 class IRCreciever{
     public:
         virtual ~IRCreciever() = default;
-        virtual void getLatest(unsigned* data) = 0;
+        virtual void getLatest(int* data) = 0;
 };

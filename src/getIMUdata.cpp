@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "MPU6050.h"
-#include "Vec3D.h"
+#include "Quaternoin.h"
 
 MPU6050 sense(0.2);
 int samples = 10000;
@@ -17,10 +17,10 @@ void setup(){
 
     while (count < samples){
         int time = micros();        
-        Vec3D linearAccel;
-        Vec3D rotAccel;
+        Quaternoin<float> linearAccel;
+        Quaternoin<float> rotAccel;
         sense.getLinearAccel(&linearAccel);
-        sense.getRotAccel(&rotAccel);
+        sense.getRotVel(&rotAccel);
         float arr[] = {linearAccel.x, linearAccel.y, linearAccel.z, rotAccel.x, rotAccel.y, rotAccel.z};
         for(float i : arr){
             Serial.print(i);
