@@ -16,34 +16,35 @@
 */
 
 //TODO get correct pin nums
-ServoMotor leftAler[] = {{9}};
-ServoMotor rightAler[] = {{11}};
+ServoMotor leftAler(elevonLeftPin);
+ServoMotor rightAler(elevonRightPin);
 
-ServoMotor rud[] = {{12}};
+//ServoMotor rud[] = {{12}};
 
 //Setup the control surfaces
-Rudder rudder = Rudder(rud, 1);
-Elevons elevons = Elevons(leftAler, rightAler, 1, 1);
+//Rudder rudder = Rudder(rud, 1);
+Elevons elevons = Elevons(&leftAler, &rightAler, 1, 1);
 
-byte interruptPin = 3;
+byte interruptPin = 2;
 byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
-IflightMode control = manualControl(&elevons, &reciever);
+manualControl control = manualControl(&elevons, &reciever);
 
 void setup(){
   bool goodToGo = true;
 
   pinMode(LED_BUILTIN, OUTPUT);
   //starting ther servos.
-  rudder.start();
+
+  //rudder.start();
   elevons.start();
 
-  int values[channelAmount];
+  float values[channelAmount];
   reciever.getLatest(values);
 
-  if(values[0] > 10) goodToGo = false;
+  //if(values[0] > 10) goodToGo = false;
 
   if(!goodToGo){
     while(true) {
@@ -59,5 +60,5 @@ void setup(){
 void loop(){
 
   control.update();
-
+  
 }

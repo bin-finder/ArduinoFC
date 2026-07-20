@@ -1,6 +1,7 @@
 #pragma once
 #include "PPMReader.h"
 #include "IRCreciever.h"
+#include "OTWmath.h"
 
 class RCreciever : public IRCreciever{
 
@@ -10,6 +11,6 @@ class RCreciever : public IRCreciever{
 
     public:
         RCreciever(int interruptPin, int numChannels);
-        void getLatest(int* data);
+        void getLatest(float* data);
 
 };

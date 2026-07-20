@@ -3,7 +3,7 @@
 #include "IElevons.h"
 
 class Elevons : public IElevons{
-	private:
+	public:
 		ServoMotor* servosLeft;
 		ServoMotor* servosRight;
 		int numLeft;

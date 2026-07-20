@@ -7,7 +7,7 @@ Elevons::Elevons(ServoMotor* servosLeft, ServoMotor* servosRight, int numLeft, i
 void Elevons::write(double percentPitch, double percentRoll){
 	int travel = 180; //TODO get max travel from servos themselves
 	for(int i = 0; i < numLeft; i++){
-		servosLeft[i].write( -1 * travel/2*(percentPitch + percentRoll));
+		servosLeft[i].write(travel/2*(percentPitch + -1 * percentRoll));
 	}
 	for(int i = 0; i < numRight; i++){
 		servosRight[i].write(travel/2*(percentPitch + percentRoll));
