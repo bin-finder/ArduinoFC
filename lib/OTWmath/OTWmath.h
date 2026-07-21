@@ -19,3 +19,18 @@ inline double fmap(double val, double frmLow, double frmHigh, double toLow, doub
                 /
             (frmHigh - frmLow) * (toHigh - toLow) + toLow;
 }
+
+/**
+ * This function will force a value to be within a range
+ * @param value The input value
+ * @param min The minimum allowable value
+ * @param max The maximum allow value
+ * @return The value that is now within the range
+ */
+
+template <typename T>
+inline T coerceIn(T value, T min, T max){
+    if(value > max) return max;
+    else if (value < min) return min;
+    else return value; 
+}

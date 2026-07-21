@@ -18,9 +18,9 @@
 */
 
 //TODO get correct pin nums
-ServoMotor leftAler(elevonLeftPin);
-ServoMotor rightAler(elevonRightPin);
-ServoMotor rudServo(10);
+ServoMotor leftAler(elevonLeftPin, 90);
+ServoMotor rightAler(elevonRightPin, 90);
+ServoMotor rudServo(10, 90);
 
 //ServoMotor rud[] = {{12}};
 
