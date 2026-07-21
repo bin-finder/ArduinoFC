@@ -11,7 +11,14 @@ class Elevons : public IElevons{
 	public:
 		Elevons(ServoMotor* servosLeft, ServoMotor* servosRight, int numLeft, int numRight);
 
-		void write(double percentPitch, double percentRoll);
+		/**
+		 * Writes the percentage of the range of the servoMotor
+		 * to the respective servos.
+		 * @param percentPitch The pitch, in percent of range
+		 * @param percentRoll The roll, I hope you got that its a percentatge by now
+		 */
+
+		void write(double percentPitch, double percentRoll); 
 
 		void start();
 };

@@ -11,6 +11,11 @@ class RCreciever : public IRCreciever{
 
     public:
         RCreciever(int interruptPin, int numChannels);
+
+        /**
+         * Doc comment
+         */
+
         void getLatest(float* data);
 
 };

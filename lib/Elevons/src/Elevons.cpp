@@ -4,6 +4,10 @@ Elevons::Elevons(ServoMotor* servosLeft, ServoMotor* servosRight, int numLeft, i
 :servosLeft(servosLeft), servosRight(servosRight), numLeft(numLeft), numRight(numRight)
 {}
 
+/**
+ * Doc comment
+ */
+
 void Elevons::write(double percentPitch, double percentRoll){
 	int travel = 180; //TODO get max travel from servos themselves
 	for(int i = 0; i < numLeft; i++){
