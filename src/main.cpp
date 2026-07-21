@@ -3,7 +3,6 @@
 #include "Rudder.h"
 #include "ServoMotor.h"
 #include "RCreciever.h"
-#include "IflightMode.h"
 #include "manualControl.h"
 #include "MPU6050.h"
 #include "selfLeveling.h"
@@ -18,9 +17,9 @@
 */
 
 //TODO get correct pin nums
-ServoMotor leftAler(elevonLeftPin, 90);
-ServoMotor rightAler(elevonRightPin, 90);
-ServoMotor rudServo(10, 90);
+ServoMotor leftAler(elevonLeftPin, 60);
+ServoMotor rightAler(elevonRightPin, 60);
+ServoMotor rudServo(10, 60);
 
 //ServoMotor rud[] = {{12}};
 
