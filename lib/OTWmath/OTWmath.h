@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 Off The Wall Math is just a collection of math functions
 I need in a project. Nothing special, no cool organization

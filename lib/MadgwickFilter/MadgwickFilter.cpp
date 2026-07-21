@@ -11,9 +11,10 @@ void MadgwicFilter::update(Quaternoin<float> gyroRates, Quaternoin<float> accel,
   temp.x = temp3.data[1][0];
   temp.y = temp3.data[2][0];
   temp.z = temp3.data[3][0];
-  Quaternoin<float> temp2 = beta * temp/temp.norm();
+  Quaternoin<float> gradient = temp / temp.norm();
   Quaternoin<float> qDot =
-    0.5f * (curAttitude * gyroRates) - beta * temp2;
+      0.5f * (curAttitude * gyroRates)
+      - beta * gradient;
   curAttitude += qDot * dt; 
   curAttitude.normalize();
 }

@@ -5,6 +5,8 @@
 #include "RCreciever.h"
 #include "IflightMode.h"
 #include "manualControl.h"
+#include "MPU6050.h"
+#include "selfLeveling.h"
 /*
 * This is the software for the Arduino Fixed Wing Flight Controler.
 * It probibly wount work.
@@ -18,11 +20,12 @@
 //TODO get correct pin nums
 ServoMotor leftAler(elevonLeftPin);
 ServoMotor rightAler(elevonRightPin);
+ServoMotor rudServo(10);
 
 //ServoMotor rud[] = {{12}};
 
 //Setup the control surfaces
-//Rudder rudder = Rudder(rud, 1);
+Rudder rudder = Rudder(&rudServo, 1);
 Elevons elevons = Elevons(&leftAler, &rightAler, 1, 1);
 
 byte interruptPin = 2;
@@ -30,7 +33,8 @@ byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
-manualControl control = manualControl(&elevons, &reciever);
+//manualControl control = manualControl(&elevons, &reciever);
+selfLeveling control = selfLeveling(&elevons,&rudder,&reciever);
 
 void setup(){
   bool goodToGo = true;

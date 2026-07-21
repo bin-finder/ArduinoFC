@@ -2,34 +2,48 @@
 #include "MPU6050.h"
 #include "Quaternoin.h"
 
-MPU6050 sense(0.2);
+MPU6050 sense(0.8,0,0);
+
 int samples = 10000;
-float dt = 0.1;
 
 void setup(){
-    Serial.begin(9600);
+
+    Serial.begin(115200);
+
     sense.begin();
 
-    int count = 0;
+    uint32_t lastTime = micros();
 
-    sense.setAccelRange(0);
-    sense.setGyroRange(0);
+    for(int count = 0; count < samples; count++){
 
-    while (count < samples){
-        int time = micros();        
-        Quaternoin<float> linearAccel;
-        Quaternoin<float> rotAccel;
-        sense.getLinearAccel(&linearAccel);
-        sense.getRotVel(&rotAccel);
-        float arr[] = {linearAccel.x, linearAccel.y, linearAccel.z, rotAccel.x, rotAccel.y, rotAccel.z};
-        for(float i : arr){
-            Serial.print(i);
-            Serial.print(",");
-        }
-        Serial.println();
-        count ++;
-        while(micros() < time+dt*1000){}
+        uint32_t now = micros();
+
+        float dt = (now - lastTime) * 1e-6f;
+        lastTime = now;
+
+        if(dt > 0.1f)
+            dt = 0.1f;
+
+
+        sense.update(dt);
+
+
+        Quaternoin<float> pos;
+        sense.getWorldOrientation(&pos);
+
+
+        Serial.print(pos.w, 4);
+        Serial.print(",");
+        Serial.print(pos.x, 4);
+        Serial.print(",");
+        Serial.print(pos.y, 4);
+        Serial.print(",");
+        Serial.println(pos.z, 4);
+
+
+        while(micros() - now < 10000){}
     }
 }
+
 
 void loop(){}

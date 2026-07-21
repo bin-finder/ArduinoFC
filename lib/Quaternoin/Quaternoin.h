@@ -14,15 +14,19 @@ public:
   Quaternoin(T w, T x, T y, T z) : w(w),x(x),y(y),z(z) {}
 
   double norm(){
-    return sqrt(x*x+y*y+z*z);
+    return sqrt(w*w+x*x+y*y+z*z);
   }
 
   void normalize(){
-    double magnitude = norm();
-    w /= magnitude;
-    x /= magnitude;
-    y /= magnitude;
-    z /= magnitude;
+      double magnitude = norm();
+
+      if (magnitude < 1e-9)
+          return;
+
+      w /= magnitude;
+      x /= magnitude;
+      y /= magnitude;
+      z /= magnitude;
   }
 
   /*
@@ -43,23 +47,24 @@ public:
     return Quaternoin(w+q.w,x+q.x,y+q.y,z+q.z);
   }
 
-  void operator+=(const Quaternoin<T>& q) const {
-    w+q.w;
-    x+q.x;
-    y+q.y;
-    z+q.z;
+  Quaternoin<T>& operator+=(const Quaternoin<T>& q) {
+    w+=q.w;
+    x+=q.x;
+    y+=q.y;
+    z+=q.z;
+    return *this;
   }
 
   Quaternoin<T> operator-(const Quaternoin<T>& q) const {
     return Quaternoin(w-q.w,x-q.x,y-q.y,z-q.z);
   }
 
-  Quaternoin<T> operator*(const float num) const {
-    return Quaternoin(w*num,x*num,y*num,z*num);
+  Quaternoin<T> operator*(const T num) const {
+    return Quaternoin<T>(w*num,x*num,y*num,z*num);
   }
 
-  Quaternoin<T> operator/(const float num) const {
-    return Quaternoin(w/num,x/num,y/num,z/num);
+  Quaternoin<T> operator/(const T num) const {
+    return Quaternoin<T>(w/num,x/num,y/num,z/num);
   }
 
   bool operator==(const Quaternoin<T>& quat) const{

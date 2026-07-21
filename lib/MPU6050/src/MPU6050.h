@@ -33,9 +33,9 @@ class MPU6050 : public IMPU6050{
     @param address The address of the MPU6050
     @param beta The tuning var for the MadgwicFilter.
     */
-    MPU6050(float beta, uint8_t address = 0x68);
+    MPU6050(float beta, int gyroMode, int accelMode, uint8_t address =0x68);
     bool begin();
-    void update();
+    void update(float dt);
 
     /*
     Sets the scale of the gyroscope.
@@ -59,7 +59,7 @@ class MPU6050 : public IMPU6050{
     void resetOrientation();
 
     /*Returns the orientation of the IMU */
-    Quaternoin<float> getWorldOrientation();
+    void getWorldOrientation(Quaternoin<float>* data);
 
     /*Returns the World Centric Accelleration*/
     void getLinearAccel(Quaternoin<float>* data);
