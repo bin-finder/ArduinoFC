@@ -37,8 +37,15 @@ byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
+MPU6050 sense(0.8,0,0);
+
 //manualControl control = manualControl(&elevons, &reciever);
-selfLeveling control = selfLeveling(&airplane,&reciever);
+selfLeveling angleMode = selfLeveling(&airplane,&sense,&reciever);
+manualControl manual = manualControl(&airplane,&reciever);
+
+IflightMode* control = &manual;
+
+unsigned long prevTime = micros();
 
 void setup(){
   bool goodToGo = true;
@@ -69,6 +76,13 @@ void setup(){
 
 void loop(){
 
-  control.update();
-  
+  // float value[numChannels];
+  // reciever.getLatest(value);
+  // if(value[chanGear] > 0) control = &angleMode;
+  // else control = &manual;
+
+  unsigned int dt = micros() - prevTime;
+  sense.update(dt);
+  prevTime = micros();
+  control->update(dt);
 }
