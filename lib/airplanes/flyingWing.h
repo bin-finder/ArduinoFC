@@ -1,3 +1,4 @@
+#pragma once
 #include "Elevons.h"
 #include "IAirplane.h"
 

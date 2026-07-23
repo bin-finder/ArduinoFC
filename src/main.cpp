@@ -1,12 +1,13 @@
 #include <Arduino.h>
-#include "Elevons.h"
 #include "Rudder.h"
+#include "Ailerons.h"
+#include "Elevators.h"
 #include "ServoMotor.h"
 #include "RCreciever.h"
 #include "manualControl.h"
 #include "MPU6050.h"
 #include "selfLeveling.h"
-#include "flyingWing.h"
+#include "standard.h"
 
 /*
 * This is the software for the Arduino Fixed Wing Flight Controler.
@@ -18,16 +19,18 @@
 * (in essence for no good reason)
 */
 
-//TODO get correct pin nums
-ServoMotor leftAler(elevonLeftPin, 60);
-ServoMotor rightAler(elevonRightPin, 60);
+ServoMotor SleftAler(elevonLeftPin, 60);
+ServoMotor SrightAler(elevonRightPin, 60);
+ServoMotor Selevator(elevatorPin, 60);
+ServoMotor Srudder(rudderPin, 60);
 
-//ServoMotor rud[] = {{12}};
+ServoMotor Sthrottle(throttlePin,180,-90);
 
-//Setup the control surfaces
-Elevons elevons = Elevons(&leftAler, &rightAler, 1, 1);
+Ailerons alerons(&SleftAler, &SrightAler);
+Elevators elevators(&Selevator, 1);
+Rudder rudder(&Srudder, 1);
 
-flyingWing airplane = flyingWing(&elevons);
+standard airplane(&alerons, &elevators, &rudder, &Sthrottle);
 
 byte interruptPin = 2;
 byte channelAmount = 6;
@@ -43,8 +46,10 @@ void setup(){
   pinMode(LED_BUILTIN, OUTPUT);
   //starting ther servos.
 
-  //rudder.start();
-  elevons.start();
+  alerons.start();
+  elevators.start();
+  Sthrottle.start();
+  rudder.start();
 
   float values[channelAmount];
   reciever.getLatest(values);

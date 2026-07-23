@@ -8,4 +8,5 @@ class IServoMotor{
         virtual void write(int angle) = 0;
         virtual int read() = 0;
         virtual int getPin() = 0;
+        virtual int getRange() = 0;
 };

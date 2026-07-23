@@ -15,8 +15,7 @@ void Rudder::start(){
 }
 
 void Rudder::write(double percentage){
-  int travel = 180; //TODO get max travel from servos themselves
   for(int i = 0; i < number; i++){
-    servos[i].write(travel/2*percentage);
+    servos[i].write(fmap(percentage, -1,1,-servos[i].getRange(), servos[i].getRange()));
   }
 }

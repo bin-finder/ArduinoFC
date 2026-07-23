@@ -1,6 +1,7 @@
 #pragma once
 #include "IServoMotor.h"
 #include "IRudder.h"
+#include "OTWmath.h"
 
 class Rudder : public IRudder{
 
