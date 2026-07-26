@@ -24,8 +24,8 @@
 
 ServoMotor SleftAler(elevonLeftPin, 60);
 ServoMotor SrightAler(elevonRightPin, 60);
-ServoMotor Selevator(elevatorPin, 60);
-ServoMotor Srudder(rudderPin, 60);
+ServoMotor Selevator(elevatorPin, 120,0,true);
+ServoMotor Srudder(rudderPin, 120);
 
 ServoMotor Sthrottle(throttlePin,180,0,true,1000,2000);
 
@@ -34,10 +34,6 @@ Elevators elevators(&Selevator, 1);
 Rudder rudder(&Srudder, 1);
 Throttle throttle(&Sthrottle);
 
-//Elevons elevons(&SleftAler, &SrightAler, 1, 1);
-
-//flyingWing airplane(&elevons);
-
 standard airplane(&alerons, &elevators, &rudder, &throttle);
 
 byte interruptPin = 2;
@@ -45,14 +41,21 @@ byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
-MPU6050 sense(1,0,0);
+MPU6050 sense(0.9,1,1);
 
 manualControl manual = manualControl(&airplane, &reciever);
 selfLeveling angleMode = selfLeveling(&airplane,&sense,&reciever);
 
 IflightMode* control = &manual;
 
+bool mode = false;
+
+int loopTime = 13000; //13ms
+
 unsigned long prevTime = micros();
+
+int count = 0;
+int prevState;
 
 void err(){
   while(true) {
@@ -63,8 +66,19 @@ void err(){
   }
 }
 
+void alternate(){
+  if(mode){
+    digitalWrite(LED_BUILTIN, HIGH);
+    mode = false;
+  }
+  else{
+    digitalWrite(LED_BUILTIN, LOW);
+    mode = true;
+  }
+}
+
 void setup(){
-  Serial.begin(115200);
+  //Serial.begin(115200);
   bool goodToGo = true;
 
   pinMode(LED_BUILTIN, OUTPUT);
@@ -80,6 +94,7 @@ void setup(){
 
   float values[channelAmount];
   reciever.getLatest(values);
+  prevState = values[chanGear];
 
   //if(values[0] > 10) goodToGo = false;
 
@@ -99,17 +114,28 @@ void loop(){
 
   float value[numChannels];
   reciever.getLatest(value);
-  if(value[chanGear] > 0) control = &angleMode;
-  else control = &manual;
+  if(value[chanGear] > 0 && prevState < 0){
+    control = &angleMode;
+    prevState = value[chanGear];
+    digitalWrite(LED_BUILTIN, HIGH);
+  }
+  else if(value[chanGear] < 0 && prevState > 0){
+    control = &manual;
+    prevState = value[chanGear];
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 
   unsigned long curTime = micros();
   unsigned long dt = curTime - prevTime;
   prevTime = curTime;
-  sense.update(dt/1000000.0f);
-  // Serial.print(dt);
-  // Serial.print(",");
-  if(control->update(dt/1000000.0f) != 1){
+  float dtSec = dt/1000000.0f;
+  sense.update(dtSec);
+  if(control->update(dtSec) != 1){
     err();
   }
+  //Timeing logic:
+  // if(++count == 50){
+  //   alternate();
+  //   count = 0;
+  // }
 }
-

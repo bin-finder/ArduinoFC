@@ -32,10 +32,10 @@ void setup(){
         sense.getWorldOrientation(&pos);
 
 
-        Serial.print(
+        Serial.print(180/PI*
     atan2(2.0f * (pos.w * pos.x + pos.y * pos.z),1.0f - 2.0f * (pos.x * pos.x + pos.y * pos.y)),4);
         Serial.print(",");
-        Serial.print(asin (2*(pos.w*pos.y - pos.z*pos.x)));
+        Serial.print(180/PI*asin (2*(pos.w*pos.y - pos.z*pos.x)));
         Serial.println();
         // Serial.print(pos.w, 4);
         // Serial.print(",");
@@ -44,6 +44,16 @@ void setup(){
         // Serial.print(pos.y, 4);
         // Serial.print(",");
         // Serial.println(pos.z, 4);
+        // Quaternoin<float> quat;
+        // sense.getRotVel(&quat);
+        // Serial.print(quat.w);
+        // Serial.print(",");
+        // Serial.print(quat.x);
+        // Serial.print(",");
+        // Serial.print(quat.y);
+        // Serial.print(",");
+        // Serial.print(quat.z);
+        
 
 
         while(micros() - now < 10000){}

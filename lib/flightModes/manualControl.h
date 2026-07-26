@@ -16,7 +16,7 @@ class manualControl : public IflightMode{
         {}
 
         int update(double dt){
-            digitalWrite(13, LOW);
+            //digitalWrite(13, LOW);
             float value[numChannels];
             controlIn->getLatest(value);
             airplane->setPitchPercent(value[chanElevator]);

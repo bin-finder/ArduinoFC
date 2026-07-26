@@ -16,8 +16,10 @@ class MPU6050 : public IMPU6050{
     uint8_t address;
     int accRange;
     int gyroMode;
+    float gyroScale;
     int gyroRanges[4] = {2,4,8,16};
     int accelMode;
+    float accelScale;
     int accelRanges[4] = {250,500,1000,2000};
     float gyroScalers[4] = {131.0,65.5,32.8,16.4};
     float accelScalers[4] = {16384,8192,4096,2048};
@@ -26,6 +28,9 @@ class MPU6050 : public IMPU6050{
     void i2cTrans(uint8_t *cmds, int len);
 
     MadgwicFilter filter = MadgwicFilter(0.2);
+
+    Quaternoin<float> gyro;
+    Quaternoin<float> linear;
 
   public:
     /*
