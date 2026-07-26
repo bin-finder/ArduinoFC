@@ -32,23 +32,16 @@ void setup(){
         sense.getWorldOrientation(&pos);
 
 
-        Serial.print(acos(pos.w)*2,4);
-        Serial.print(",");
         Serial.print(
-    atan2(
-        2.0f * (pos.w * pos.x + pos.y * pos.z),
-        1.0f - 2.0f * (pos.x * pos.x + pos.y * pos.y)
-    ),
-    4
-);
+    atan2(2.0f * (pos.w * pos.x + pos.y * pos.z),1.0f - 2.0f * (pos.x * pos.x + pos.y * pos.y)),4);
         Serial.print(",");
-        Serial.print(pos.w, 4);
-        Serial.print(",");
-        Serial.print(pos.x, 4);
-        Serial.print(",");
-        Serial.print(pos.y, 4);
-        Serial.print(",");
-        Serial.println(pos.z, 4);
+        // Serial.print(pos.w, 4);
+        // Serial.print(",");
+        // Serial.print(pos.x, 4);
+        // Serial.print(",");
+        // Serial.print(pos.y, 4);
+        // Serial.print(",");
+        // Serial.println(pos.z, 4);
 
 
         while(micros() - now < 10000){}

@@ -65,8 +65,8 @@ void MPU6050::getLinearAccel(Quaternoin<float>* data){
   i2cTrans(commands, sizeof(commands));
   Wire.requestFrom(static_cast<uint8_t>(address), static_cast<uint8_t>(0x06));
   data->w = 0;
-  data->x = ((int16_t)((Wire.read() << 8) | Wire.read()) / static_cast<float>(accelScalers[accelMode]));
   data->y = ((int16_t)((Wire.read() << 8) | Wire.read()) / static_cast<float>(accelScalers[accelMode]));
+  data->x = ((int16_t)((Wire.read() << 8) | Wire.read()) / static_cast<float>(accelScalers[accelMode]));
   data->z = ((int16_t)((Wire.read() << 8) | Wire.read()) / static_cast<float>(accelScalers[accelMode]));
 }
 

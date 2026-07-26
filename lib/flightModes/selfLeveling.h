@@ -32,8 +32,8 @@ class selfLeveling : public IflightMode{
             prevTime = micros();
             Quaternoin<float> curState;
             sense->getWorldOrientation(&curState);
-            float curPitch = asin(2*curState.x*curState.y + 2*curState.z*curState.w);
-            float curBank = acos(curState->w)*2;
+            float curPitch = asin(2*curState.w*curState.y + 2*curState.z*curState.x);
+            float curBank = atan2(2.0f * (curState.w * curState.x + curState.y * curState.z),1.0f - 2.0f * (curState.x * curState.x + curState.y * curState.y)),4);
             //TODO add extrainous cases, as in https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
             //Implement PI controlers.
 
