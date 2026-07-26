@@ -27,7 +27,7 @@ class pid{
         double kp;
         double ki;
         double kd;
-        double prpevVal;
+        double prpevVal = 0;
 
         /**
          * Constructor.

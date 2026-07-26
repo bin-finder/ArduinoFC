@@ -35,7 +35,7 @@ class MPU6050 : public IMPU6050{
     */
     MPU6050(float beta, int gyroMode, int accelMode, uint8_t address =0x68);
     bool begin();
-    void update(float dt);
+    void update(double dt);
 
     /*
     Sets the scale of the gyroscope.

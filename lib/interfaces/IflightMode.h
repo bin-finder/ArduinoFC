@@ -15,7 +15,7 @@ class IflightMode{
          * flight mode to carry out its behavior.
          */
 
-        virtual int update(unsigned int dt) = 0;
+        virtual int update(double dt) = 0;
 
         /**
          * This is here incase motor configs need reset inbetween flight

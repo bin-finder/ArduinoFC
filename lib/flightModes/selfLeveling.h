@@ -12,7 +12,7 @@ class selfLeveling : public IflightMode{
         IAirplane* airplane = nullptr;
         unsigned long prevTime;
         pid pitch = pid(0.1,0.0,0.1);
-        pid roll = pid(0.1,0.0,0.1);
+        pid roll = pid(0.1,0.0,1);
 
     public:
         selfLeveling(IAirplane* airplane, IMPU6050* sense, RCreciever* control) :
@@ -21,17 +21,23 @@ class selfLeveling : public IflightMode{
             airplane(airplane)
         {}
 
-        int update(unsigned int dt){
+        int update(double dt){
             digitalWrite(13, HIGH);
             float controlTgt[numChannels];
             control->getLatest(controlTgt);
             Quaternoin<float> curState;
             sense->getWorldOrientation(&curState);
-            float curPitch = asin(2*curState.w*curState.y + 2*curState.z*curState.x);
-            float curBank = atan2(2.0f * (curState.w * curState.x + curState.y * curState.z),1.0f - 2.0f * (curState.x * curState.x + curState.y * curState.y)),4);
+            float curPitch = asin(2*curState.w*curState.y - 2*curState.z*curState.x);
+            float curBank = atan2(2.0f * (curState.w * curState.x + curState.y * curState.z),1.0f - 2.0f * (curState.x * curState.x + curState.y * curState.y));
+
+            if(isnan(curPitch)) return 0;
+
+            // Serial.print(curPitch*180/PI);
+            // Serial.print(",");
             //TODO add extrainous cases, as in https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
             //Implement PI controlers.
-
+            // Serial.print(fmap(controlTgt[chanElevator],-1,1,-45,45));
+            // Serial.print(",");
             airplane->setPitchPercent(
                 pitch.update(
                     fmap(controlTgt[chanElevator],-1,1,-45,45),
@@ -39,7 +45,7 @@ class selfLeveling : public IflightMode{
                     dt
                 )
             );
-
+            
             airplane->setRollPercent(
                 roll.update(
                     fmap(controlTgt[chanAileron],-1,1,-45,45),

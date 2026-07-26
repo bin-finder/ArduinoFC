@@ -74,7 +74,7 @@ void MPU6050::getWorldOrientation(Quaternoin<float>* data){
   *data = filter.getAttitude();
 }
 
-void MPU6050::update(float dt){
+void MPU6050::update(double dt){
   Quaternoin<float> gyro;
   Quaternoin<float> linear;
   getRotVel(&gyro);

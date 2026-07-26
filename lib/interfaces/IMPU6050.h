@@ -10,5 +10,5 @@ class IMPU6050{
         virtual void getWorldOrientation(Quaternoin<float>* data) = 0;
         virtual void getLinearAccel(Quaternoin<float>* data) = 0;
         virtual void getRotVel(Quaternoin<float>* data) = 0;
-        virtual void update(float dt) = 0;
+        virtual void update(double dt) = 0;
 };

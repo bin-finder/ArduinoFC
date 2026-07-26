@@ -15,7 +15,7 @@ class manualControl : public IflightMode{
         controlIn(controlIn)
         {}
 
-        int update(unsigned int dt){
+        int update(double dt){
             digitalWrite(13, LOW);
             float value[numChannels];
             controlIn->getLatest(value);

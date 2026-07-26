@@ -35,6 +35,8 @@ void setup(){
         Serial.print(
     atan2(2.0f * (pos.w * pos.x + pos.y * pos.z),1.0f - 2.0f * (pos.x * pos.x + pos.y * pos.y)),4);
         Serial.print(",");
+        Serial.print(asin (2*(pos.w*pos.y - pos.z*pos.x)));
+        Serial.println();
         // Serial.print(pos.w, 4);
         // Serial.print(",");
         // Serial.print(pos.x, 4);

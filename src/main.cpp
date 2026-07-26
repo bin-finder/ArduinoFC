@@ -10,6 +10,7 @@
 #include "selfLeveling.h"
 #include "standard.h"
 #include "Throttle.h"
+#include "dummyServoMotor.h" 
 
 /*
 * This is the software for the Arduino Fixed Wing Flight Controler.
@@ -44,7 +45,7 @@ byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
-MPU6050 sense(0.8,0,0);
+MPU6050 sense(1,0,0);
 
 manualControl manual = manualControl(&airplane, &reciever);
 selfLeveling angleMode = selfLeveling(&airplane,&sense,&reciever);
@@ -53,11 +54,23 @@ IflightMode* control = &manual;
 
 unsigned long prevTime = micros();
 
+void err(){
+  while(true) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(250);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(250);
+  }
+}
+
 void setup(){
+  Serial.begin(115200);
   bool goodToGo = true;
 
   pinMode(LED_BUILTIN, OUTPUT);
   //starting ther servos.
+
+  sense.begin();
 
   alerons.start();
   elevators.start();
@@ -79,6 +92,7 @@ void setup(){
     }
   }
   else digitalWrite(LED_BUILTIN, HIGH);
+  Serial.println("Starting...");
 }
 
 void loop(){
@@ -88,8 +102,14 @@ void loop(){
   if(value[chanGear] > 0) control = &angleMode;
   else control = &manual;
 
-  unsigned int dt = micros() - prevTime;
-  sense.update(dt);
-  prevTime = micros();
-  control->update(dt);
+  unsigned long curTime = micros();
+  unsigned long dt = curTime - prevTime;
+  prevTime = curTime;
+  sense.update(dt/1000000.0f);
+  // Serial.print(dt);
+  // Serial.print(",");
+  if(control->update(dt/1000000.0f) != 1){
+    err();
+  }
 }
+
