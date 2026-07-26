@@ -24,4 +24,8 @@ class flyingWing : public IAirplane{
         void setYawPercent(double percent){
             ;
         }
+
+        void setThrottlePercent(double percent){
+            ;
+        }
 };

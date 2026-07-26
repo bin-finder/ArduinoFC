@@ -4,15 +4,16 @@
 #include "Elevators.h"
 #include "IAirplane.h"
 #include "OTWmath.h"
+#include "Throttle.h"
 
 class standard : public IAirplane{
     public:
         Ailerons* ailerons;
         Elevators* elevators;
         Rudder* rudder;
-        ServoMotor* throttle;
+        Throttle* throttle;
 
-        standard(Ailerons* ailerons, Elevators* elevators, Rudder* rudder, ServoMotor* throttle) :
+        standard(Ailerons* ailerons, Elevators* elevators, Rudder* rudder, Throttle* throttle) :
             ailerons(ailerons),
             elevators(elevators),
             rudder(rudder),
@@ -28,10 +29,10 @@ class standard : public IAirplane{
         }
 
         void setYawPercent(double percent){
-            ;
+            rudder->write(percent);
         }
 
-        void setThrottle(double percent){
-            throttle->write(fmap(percent, 0,1,0,180));
+        void setThrottlePercent(double percent){
+            throttle->write(percent);
         }
 };

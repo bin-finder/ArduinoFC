@@ -6,4 +6,5 @@ class IAirplane{
         virtual void setRollPercent(double percent) = 0;
         virtual void setPitchPercent(double percent) = 0;
         virtual void setYawPercent(double percent) = 0;
+        virtual void setThrottlePercent(double percent) = 0;
 };

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "Rudder.h"
+#include "flyingWing.h"
 #include "Ailerons.h"
 #include "Elevators.h"
 #include "ServoMotor.h"
@@ -8,6 +9,7 @@
 #include "MPU6050.h"
 #include "selfLeveling.h"
 #include "standard.h"
+#include "Throttle.h"
 
 /*
 * This is the software for the Arduino Fixed Wing Flight Controler.
@@ -24,21 +26,30 @@ ServoMotor SrightAler(elevonRightPin, 60);
 ServoMotor Selevator(elevatorPin, 60);
 ServoMotor Srudder(rudderPin, 60);
 
-ServoMotor Sthrottle(throttlePin,180,-90);
+ServoMotor Sthrottle(throttlePin,180,0,true,1000,2000);
 
 Ailerons alerons(&SleftAler, &SrightAler);
 Elevators elevators(&Selevator, 1);
 Rudder rudder(&Srudder, 1);
+Throttle throttle(&Sthrottle);
 
-standard airplane(&alerons, &elevators, &rudder, &Sthrottle);
+//Elevons elevons(&SleftAler, &SrightAler, 1, 1);
+
+//flyingWing airplane(&elevons);
+
+standard airplane(&alerons, &elevators, &rudder, &throttle);
 
 byte interruptPin = 2;
 byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
-//manualControl control = manualControl(&elevons, &reciever);
-selfLeveling control = selfLeveling(&airplane,&reciever);
+manualControl manual = manualControl(&airplane, &reciever);
+selfLeveling angleMode = selfLeveling(&airplane,&sense,&reciever);
+
+IflightMode* control = &manual;
+
+unsigned long prevTime = micros();
 
 void setup(){
   bool goodToGo = true;
@@ -48,8 +59,9 @@ void setup(){
 
   alerons.start();
   elevators.start();
-  Sthrottle.start();
+  throttle.start();
   rudder.start();
+  //elevons.start();
 
   float values[channelAmount];
   reciever.getLatest(values);
@@ -69,6 +81,13 @@ void setup(){
 
 void loop(){
 
-  control.update();
-  
+  float value[numChannels];
+  reciever.getLatest(value);
+  if(value[chanGear] > 0) control = &angleMode;
+  else control = &manual;
+
+  unsigned int dt = micros() - prevTime;
+  sense.update(dt);
+  prevTime = micros();
+  control->update(dt);
 }

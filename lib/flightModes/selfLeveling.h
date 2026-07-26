@@ -23,7 +23,8 @@ class selfLeveling : public IflightMode{
             sense->update(0);
         }
 
-        int update(){
+        int update(unsigned int dt){
+            digitalWrite(13, HIGH);
             float controlTgt[numChannels];
             control->getLatest(controlTgt);
             unsigned int dt = micros() - prevTime;
@@ -32,7 +33,7 @@ class selfLeveling : public IflightMode{
             Quaternoin<float> curState;
             sense->getWorldOrientation(&curState);
             float curPitch = asin(2*curState.x*curState.y + 2*curState.z*curState.w);
-            float curBank = atan2(2*curState.x*curState.w - 2*curState.y*curState.z, 1 - 2*curState.x*curState.x - 2*curState.z*curState.z);
+            float curBank = acos(curState->w)*2;
             //TODO add extrainous cases, as in https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
             //Implement PI controlers.
 
@@ -55,6 +56,8 @@ class selfLeveling : public IflightMode{
             airplane->setYawPercent(
                 controlTgt[4]
             );
+
+            airplane->setThrottlePercent(controlTgt[chanThrottle]);
 
             return 1;
         }

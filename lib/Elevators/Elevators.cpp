@@ -7,7 +7,7 @@ Elevators::Elevators(IServoMotor* servo, int numServos) :
 
 void Elevators::write(double percent){
     for(int i = 0; i < numServos; i++){
-        servo[i].write(percent);
+        servo[i].write(fmap(percent, -1, 1, -servo[i].getRange()/2, servo[i].getRange()/2));
     }
 }
 

@@ -15,14 +15,14 @@ class manualControl : public IflightMode{
         controlIn(controlIn)
         {}
 
-        int update(){
+        int update(unsigned int dt){
+            digitalWrite(13, LOW);
             float value[numChannels];
             controlIn->getLatest(value);
-            // for(int i = 0; i < numChannels; i++){
-            //     scaled[i] = map(value[i], 1000,2000,-1,1);
-            // }
-            elevons->write(value[0],value[1]);
-            //elevons->servosLeft->write(fmap(value[0], -1,1,-90,90));
+            airplane->setPitchPercent(value[chanElevator]);
+            airplane->setRollPercent(value[chanAileron]);
+            airplane->setYawPercent(value[chanRudder]);
+            airplane->setThrottlePercent(value[chanThrottle]);
             return 1;
         }
 
