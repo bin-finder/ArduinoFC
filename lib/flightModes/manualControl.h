@@ -1,17 +1,17 @@
 #pragma once
-#include "Elevons.h"
-#include "RCreciever.h"
+#include "IAirplane.h"
+#include "IRCreciever.h"
 #include "config.h"
 #include "IflightMode.h"
 #include <Arduino.h>
 
 class manualControl : public IflightMode{
     private:
-        Elevons* elevons = nullptr;
-        RCreciever* controlIn = nullptr;
+        IAirplane* airplane = nullptr;
+        IRCreciever* controlIn = nullptr;
     public:
-        manualControl(Elevons* elevons, RCreciever* controlIn) : 
-        elevons(elevons), 
+        manualControl(IAirplane* airplane, IRCreciever* controlIn) : 
+        airplane(airplane), 
         controlIn(controlIn)
         {}
 

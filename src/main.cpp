@@ -44,6 +44,8 @@ byte channelAmount = 6;
 
 RCreciever reciever(interruptPin, channelAmount);
 
+MPU6050 sense(0.8,0,0);
+
 manualControl manual = manualControl(&airplane, &reciever);
 selfLeveling angleMode = selfLeveling(&airplane,&sense,&reciever);
 
