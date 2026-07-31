@@ -19,7 +19,7 @@ class manualControl : public IflightMode{
             //digitalWrite(13, LOW);
             float value[numChannels];
             controlIn->getLatest(value);
-            airplane->setPitchPercent(value[chanElevator]);
+            airplane->setPitchPercent(-value[chanElevator]);
             airplane->setRollPercent(value[chanAileron]);
             airplane->setYawPercent(value[chanRudder]);
             airplane->setThrottlePercent(value[chanThrottle]);

@@ -3,7 +3,7 @@
 
 class dummyServoMotor : public IServoMotor{
   public:
-  dummyServoMotor(int pin,int range){};
+  dummyServoMotor(int pin,int range, int other, bool reverse){};
   void start(){}
   void stop(){}
   int getPin(){}

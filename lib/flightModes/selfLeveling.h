@@ -4,6 +4,7 @@
 #include "OTWmath.h"
 #include "IAirplane.h"
 #include "IMPU6050.h"
+#include "iirFilter.h"
 
 class selfLeveling : public IflightMode{
     private:
@@ -11,8 +12,9 @@ class selfLeveling : public IflightMode{
         IMPU6050* sense = nullptr;
         IAirplane* airplane = nullptr;
         unsigned long prevTime;
-        pid pitch = pid(0.1,0.0,0.0);
-        pid roll = pid(0.1,0.0,0.0);
+        pid pitch{0.08,0.0,0.001};
+        pid roll{0.1,0.0,0.001};
+        iirFilter<double> pidFilter{0.1};
 
     public:
         selfLeveling(IAirplane* airplane, IMPU6050* sense, RCreciever* control) :
@@ -32,25 +34,30 @@ class selfLeveling : public IflightMode{
 
             //if(isnan(curPitch)) return 0;
 
-            // Serial.print(curPitch*180/PI);
+            Serial.print(curPitch*180/PI);
+            Serial.println();
             // Serial.print(",");
             //TODO add extrainous cases, as in https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
             //Implement PI controlers.
             // Serial.println(fmap(controlTgt[chanElevator],-1,1,-45,45));
             // Serial.print(",");
             airplane->setPitchPercent(
-                pitch.update(
-                    fmap(controlTgt[chanElevator],-1,1,-45,45),
-                    curPitch*180/PI,
-                    dt
+                pidFilter.update(
+                    pitch.update(
+                        -fmap(controlTgt[chanElevator],-1,1,-45,45),
+                        curPitch*180/PI,
+                        dt
+                    )
                 )
             );
             
             airplane->setRollPercent(
-                roll.update(
-                    fmap(controlTgt[chanAileron],-1,1,-45,45),
-                    curBank*180/PI,
-                    dt
+                pidFilter.update(
+                    roll.update(
+                        fmap(controlTgt[chanAileron],-1,1,-45,45),
+                        -curBank*180/PI,
+                        dt
+                    )
                 )
             );
             

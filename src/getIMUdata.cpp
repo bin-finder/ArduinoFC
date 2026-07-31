@@ -31,7 +31,7 @@ void setup(){
         Quaternoin<float> pos;
         sense.getWorldOrientation(&pos);
 
-
+        //roll/pitch
         Serial.print(180/PI*
     atan2(2.0f * (pos.w * pos.x + pos.y * pos.z),1.0f - 2.0f * (pos.x * pos.x + pos.y * pos.y)),4);
         Serial.print(",");

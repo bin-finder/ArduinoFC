@@ -19,15 +19,14 @@
 
 class pid{
     private:
-        double numPoints;
         double integral=0;
-        double slope;
+        double diritive = 0;
 
     public:
         double kp;
         double ki;
         double kd;
-        double prpevVal = 0;
+        double prevErr = 0;
 
         /**
          * Constructor.
@@ -42,14 +41,17 @@ class pid{
          * @param dt The diffrence in time from the last update.
          */
         double update(double tgt, double curVal, double dt){
-            double dTgt = (tgt - curVal);
-            integral += dt*dTgt;
+            if (dt <= 0.0f)
+                return 0.0f;
+            double err = (tgt - curVal);
+            integral += dt*err;
+            float rawD = (err - prevErr)/dt;
             double out = 
-                kp*dTgt +
+                kp*err +
                 ki*integral +
-                kd*(prpevVal - curVal)/dt;
+                kd*(0.95*diritive+0.05*rawD);
 
-            prpevVal = curVal;
+            prevErr = curVal;
             return out;
         }
 };

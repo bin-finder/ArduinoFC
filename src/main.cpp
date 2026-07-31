@@ -24,7 +24,7 @@
 
 ServoMotor SleftAler(elevonLeftPin, 60);
 ServoMotor SrightAler(elevonRightPin, 60);
-ServoMotor Selevator(elevatorPin, 120,0,true);
+ServoMotor Selevator(elevatorPin, 120);
 ServoMotor Srudder(rudderPin, 120);
 
 ServoMotor Sthrottle(throttlePin,180,0,true,1000,2000);
@@ -43,19 +43,16 @@ RCreciever reciever(interruptPin, channelAmount);
 
 MPU6050 sense(0.9,1,1);
 
-manualControl manual = manualControl(&airplane, &reciever);
+manualControl manualMode = manualControl(&airplane, &reciever);
 selfLeveling angleMode = selfLeveling(&airplane,&sense,&reciever);
 
-IflightMode* control = &manual;
+IflightMode* control = &manualMode;
 
 bool mode = false;
 
 int loopTime = 13000; //13ms
 
 unsigned long prevTime = micros();
-
-int count = 0;
-int prevState;
 
 void err(){
   while(true) {
@@ -94,7 +91,6 @@ void setup(){
 
   float values[channelAmount];
   reciever.getLatest(values);
-  prevState = values[chanGear];
 
   //if(values[0] > 10) goodToGo = false;
 
@@ -114,16 +110,8 @@ void loop(){
 
   float value[numChannels];
   reciever.getLatest(value);
-  if(value[chanGear] > 0 && prevState < 0){
-    control = &angleMode;
-    prevState = value[chanGear];
-    digitalWrite(LED_BUILTIN, HIGH);
-  }
-  else if(value[chanGear] < 0 && prevState > 0){
-    control = &manual;
-    prevState = value[chanGear];
-    digitalWrite(LED_BUILTIN, LOW);
-  }
+  if(value[chanGear] > 0) control = &angleMode;
+  else control = &manualMode;
 
   unsigned long curTime = micros();
   unsigned long dt = curTime - prevTime;
