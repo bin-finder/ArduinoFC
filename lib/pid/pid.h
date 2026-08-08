@@ -45,11 +45,10 @@ class pid{
                 return 0.0f;
             double err = (tgt - curVal);
             integral += dt*err;
-            float rawD = (err - prevErr)/dt;
             double out = 
                 kp*err +
                 ki*integral +
-                kd*(0.95*diritive+0.05*rawD);
+                kd*(err - prevErr)/dt;
 
             prevErr = curVal;
             return out;

@@ -6,8 +6,8 @@ class dummyServoMotor : public IServoMotor{
   dummyServoMotor(int pin,int range, int other, bool reverse){};
   void start(){}
   void stop(){}
-  int getPin(){}
-  int read(){}
+  int getPin(){return 0;}
+  int read(){return 0;}
   int getRange(){return 60;}
   void write(int angle){
     Serial.println(angle);

@@ -12,7 +12,7 @@ filter(beta)
   accelScale = accelScalers[accelMode];
 }
 
-bool MPU6050::begin(){
+int MPU6050::begin(){
   Wire.begin();
   Wire.setClock(400000);
   i2cTrans(0x6B,0x00); //wake up the IMU.
@@ -20,7 +20,7 @@ bool MPU6050::begin(){
   //i2cTrans({})
   setGyroRange(gyroMode);
   setAccelRange(accelMode);
-  return true;
+  return 0;
 }
 
 void MPU6050::resetOrientation(){

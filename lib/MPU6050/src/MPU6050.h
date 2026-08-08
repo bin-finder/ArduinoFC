@@ -39,7 +39,7 @@ class MPU6050 : public IMPU6050{
     @param beta The tuning var for the MadgwicFilter.
     */
     MPU6050(float beta, int gyroMode, int accelMode, uint8_t address =0x68);
-    bool begin();
+    int begin();
     void update(double dt);
 
     /*

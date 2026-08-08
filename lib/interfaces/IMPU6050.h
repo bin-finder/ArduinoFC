@@ -4,6 +4,7 @@
 class IMPU6050{
     public:
         virtual ~IMPU6050() = default;
+        virtual int begin() = 0;
         virtual void setGyroRange(int num) = 0;
         virtual void setAccelRange(int num) = 0;
         virtual void resetOrientation() = 0;

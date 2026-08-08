@@ -22,6 +22,8 @@
 * (in essence for no good reason)
 */
 
+//Define all the parts of the airplane.
+
 ServoMotor SleftAler(elevonLeftPin, 60);
 ServoMotor SrightAler(elevonRightPin, 60);
 ServoMotor Selevator(elevatorPin, 120);
@@ -54,25 +56,8 @@ int loopTime = 13000; //13ms
 
 unsigned long prevTime = micros();
 
-void err(){
-  while(true) {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(250);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(250);
-  }
-}
-
-void alternate(){
-  if(mode){
-    digitalWrite(LED_BUILTIN, HIGH);
-    mode = false;
-  }
-  else{
-    digitalWrite(LED_BUILTIN, LOW);
-    mode = true;
-  }
-}
+void err();
+void alternate();
 
 void setup(){
   //Serial.begin(115200);
@@ -81,7 +66,7 @@ void setup(){
   pinMode(LED_BUILTIN, OUTPUT);
   //starting ther servos.
 
-  sense.begin();
+  if(sense.begin() == 1) goodToGo = false;
 
   alerons.start();
   elevators.start();
@@ -126,4 +111,24 @@ void loop(){
   //   alternate();
   //   count = 0;
   // }
+}
+
+void err(){
+  while(true) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(250);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(250);
+  }
+}
+
+void alternate(){
+  if(mode){
+    digitalWrite(LED_BUILTIN, HIGH);
+    mode = false;
+  }
+  else{
+    digitalWrite(LED_BUILTIN, LOW);
+    mode = true;
+  }
 }
