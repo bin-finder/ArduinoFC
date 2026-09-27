@@ -45,21 +45,21 @@ class selfLeveling : public IflightMode{
             // Serial.print(",");
             airplane->setPitchPercent( 
                 pitch.update(
-                    valFilter(
-                        -fmap(controlTgt[chanElevator],-1,1,-45,45),
-                        curPitch*180/PI,
-                        dt
-                    )
+                    valFilter.update(
+                        -fmap(controlTgt[chanElevator],-1,1,-45,45)
+                    ),
+                    curPitch*180/PI,
+                    dt
                 )
             );
             
             airplane->setRollPercent(
                 roll.update(
-                    valFilter(
-                        fmap(controlTgt[chanAileron],-1,1,-45,45),
-                        -curBank*180/PI,
-                        dt
-                    )
+                    valFilter.update(
+                        fmap(controlTgt[chanAileron],-1,1,-45,45)
+                    ),
+                    -curBank*180/PI,
+                    dt
                 )
             );
             
